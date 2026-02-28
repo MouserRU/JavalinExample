@@ -11,10 +11,19 @@ public class HelloWorld {
             config.routes.get("/", ctx -> ctx.result("Hello World"));
 
             // Пример диспетчеризации запросов
-            config.routes.get("/hello", ctx -> ctx.result("GET /hello"));
-            config.routes.post("/hello", ctx -> ctx.result("POST /hello"));
+            config.routes.get("/request", ctx -> ctx.result("GET /request"));
+            config.routes.post("/request", ctx -> ctx.result("POST /request"));
 
-        });
+            // Получаем параметр запроса
+            config.routes.get("/hello", ctx -> {
+                var name = ctx.queryParam("name");
+                if (name == null) {
+                    ctx.redirect("/");
+                } else {
+                    ctx.result("Hello " + name);
+                }
+            });
+       });
         app.start(7070); // Стартуем веб-сервер
     }
 }
