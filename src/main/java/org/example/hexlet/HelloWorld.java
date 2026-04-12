@@ -6,7 +6,9 @@ public class HelloWorld {
     public static void main(String[] args) {
         // Создаем приложение
         var app = Javalin.create(config -> {
+            // Включаем логирование
             config.bundledPlugins.enableDevLogging();
+
             // Описываем, что загрузится по адресу /
             config.routes.get("/", ctx -> ctx.result("Hello World"));
 
@@ -23,7 +25,14 @@ public class HelloWorld {
                     ctx.result("Hello " + name);
                 }
             });
-       });
+
+            // Пример работы с динамическими маршрутами
+            config.routes.get("/users/{id}/post{postid}", ctx -> {
+                var id = ctx.pathParam("id");
+                var postid = ctx.pathParam("postid");
+                ctx.result("User " + id + " post " + postid);
+            });
+        });
         app.start(7070); // Стартуем веб-сервер
     }
 }
